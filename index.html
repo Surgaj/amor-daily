@@ -806,6 +806,26 @@ function salvarMensagens(mensagem) {
     mensagens.push(mensagem);
     localStorage.setItem("mensagens", JSON.stringify(mensagens));
 }
+        // Funções para salvar e exibir mensagens no LocalStorage
+    function salvarMensagens(mensagem) {
+        let mensagens = JSON.parse(localStorage.getItem('mensagens')) || [];
+        mensagens.push(mensagem);
+        localStorage.setItem('mensagens', JSON.stringify(mensagens));
+    }
+
+    window.onload = () => {
+        let mensagens = JSON.parse(localStorage.getItem('mensagens')) || [];
+        mensagens.forEach(msg => {
+            // Exiba as mensagens no site
+            exibirMensagem(msg);
+        });
+    };
+
+    function exibirMensagem(mensagem) {
+        let div = document.createElement('div');
+        div.innerHTML = mensagem;
+        document.getElementById('mensagens-container').appendChild(div);
+    }
     </script>
 
   </body>
