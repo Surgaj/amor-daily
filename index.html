@@ -800,31 +800,29 @@ Como em Orange, teremos nosso próprio lugar especial onde iremos sempre que pre
         document.body.classList.add('dark-mode');
         document.getElementById('themeIcon').className = 'fas fa-sun text-pink-300';
       }
-      // Função para salvar mensagens no LocalStorage
+      // Função para salvar as mensagens no LocalStorage
 function salvarMensagens(mensagem) {
-    let mensagens = JSON.parse(localStorage.getItem("mensagens")) || [];
+    let mensagens = JSON.parse(localStorage.getItem('mensagens')) || [];
     mensagens.push(mensagem);
-    localStorage.setItem("mensagens", JSON.stringify(mensagens));
+    localStorage.setItem('mensagens', JSON.stringify(mensagens));
+    exibirMensagem(mensagem);  // Exibe imediatamente após salvar
 }
-        // Funções para salvar e exibir mensagens no LocalStorage
-    function salvarMensagens(mensagem) {
-        let mensagens = JSON.parse(localStorage.getItem('mensagens')) || [];
-        mensagens.push(mensagem);
-        localStorage.setItem('mensagens', JSON.stringify(mensagens));
-    }
 
-    window.onload = () => {
-        let mensagens = JSON.parse(localStorage.getItem('mensagens')) || [];
-        mensagens.forEach(msg => {
-            // Exiba as mensagens no site
-            exibirMensagem(msg);
-        });
-    };
+// Função para exibir as mensagens na página
+function exibirMensagem(mensagem) {
+    let div = document.createElement('div');
+    div.innerHTML = mensagem;
+    document.getElementById('mensagens-container').appendChild(div);
+}
 
-    function exibirMensagem(mensagem) {
-        let div = document.createElement('div');
-        div.innerHTML = mensagem;
-        document.getElementById('mensagens-container').appendChild(div);
+// Recupera as mensagens do LocalStorage ao carregar a página
+window.onload = () => {
+    let mensagens = JSON.parse(localStorage.getItem('mensagens')) || [];
+    mensagens.forEach(msg => {
+        exibirMensagem(msg);
+    });
+};
+
     }
     </script>
 
