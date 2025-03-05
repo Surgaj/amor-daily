@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensagem Para Meu Amor ❤️</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      @keyframes heartbeat {
+        0% {
+          transform: scale(1);
+        }
+
+        25% {
+          transform: scale(1.1);
+        }
+
+        50% {
+          transform: scale(1);
+        }
+
+        75% {
+          transform: scale(1.1);
+        }
+
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0);
+          opacity: 0;
+        }
+
+        50% {
+          opacity: 1;
+        }
+
+        100% {
+          transform: translateY(-300px);
+          opacity: 0;
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      body {
+        background-color: #FFF5F5;
+        color: #2D1D1E;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      body.dark-mode {
+        background-color: #291D1E;
+        color: #FFF5F5;
+      }
+
+      .heart-button {
+        animation: heartbeat 1.5s infinite;
+        background-color: #FF4B91;
+      }
+
+      .heart-float {
+        position: absolute;
+        font-size: 20px;
+        color: #FF4B91;
+        animation: floatUp 4s ease-in forwards;
+        z-index: 10;
+      }
+
+      .tab-btn.active {
+        background-color: #FF4B91;
+        color: white;
+      }
+
+      .tab-panel {
+        display: none;
+        animation: fadeIn 0.5s;
+      }
+
+      .tab-panel.active {
+        display: block;
+      }
+
+      .content-change {
+        animation: fadeIn 0.5s;
+      }
+
+      .memory-card,
+      .quote-card,
+      .poem-card,
+      .compliment-card {
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+
+      .memory-card:hover,
+      .quote-card:hover,
+      .poem-card:hover,
+      .compliment-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .phrase-item {
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .phrase-item:hover {
+        background-color: rgba(255, 75, 145, 0.1);
+        transform: translateX(5px);
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 50;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal.show {
+        display: flex;
+        animation: fadeIn 0.3s;
+      }
+
+      .modal-content {
+        background-color: white;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        max-width: 90%;
+        width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      body.dark-mode .modal-content {
+        background-color: #291D1E;
+      }
+    </style>
+    <script type="text/javascript" src="./index.js" defer=""></script>
+    <link rel="stylesheet" href="./index.css">
+  </head>
+
+  <body>
+    <div id="app" class="container mx-auto px-4 py-8 max-w-3xl">
+      <header class="text-center mb-8 relative">
+        <div class="absolute top-0 right-0 p-2">
+          <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-pink-100 dark:bg-pink-900">
+            <i id="themeIcon" class="fas fa-moon text-pink-600 dark:text-pink-300"></i>
+          </button>
+        </div>
+
+        <h1 class="text-4xl md:text-5xl font-bold mb-2 text-pink-600 dark:text-pink-400">Para Meu Amor Otaku ❤️</h1>
+        <p class="text-xl italic mb-2">Uma mensagem especial para você</p>
+        <p id="randomQuote" class="text-sm font-medium text-purple-600 dark:text-purple-400" onclick="changeHeaderQuote()">Você é meu 'soulmate' como em Your Name</p>
+      </header>
+
+      <!-- Tab Navigation -->
+      <div class="flex flex-wrap mb-6 overflow-x-auto pb-2">
+        <button class="tab-btn active px-4 py-2 mx-1 rounded-lg bg-pink-200 dark:bg-pink-900" onclick="openTab(this, 'messages')">
+          <i class="fas fa-heart mr-1"></i> Mensagens
+        </button>
+        <button class="tab-btn px-4 py-2 mx-1 rounded-lg bg-pink-200 dark:bg-pink-900" onclick="openTab(this, 'poems')">
+          <i class="fas fa-feather-alt mr-1"></i> Poemas
+        </button>
+        <button class="tab-btn px-4 py-2 mx-1 rounded-lg bg-pink-200 dark:bg-pink-900" onclick="openTab(this, 'quotes')">
+          <i class="fas fa-quote-left mr-1"></i> Frases de Anime
+        </button>
+        <button class="tab-btn px-4 py-2 mx-1 rounded-lg bg-pink-200 dark:bg-pink-900" onclick="openTab(this, 'compliments')">
+          <i class="fas fa-crown mr-1"></i> Elogios
+        </button>
+        <button class="tab-btn px-4 py-2 mx-1 rounded-lg bg-pink-200 dark:bg-pink-900" onclick="openTab(this, 'memories')">
+          <i class="fas fa-clock mr-1"></i> Memórias
+        </button>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="tab-content bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <!-- Mensagens Tab -->
+        <div id="messages" class="tab-panel active">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fas fa-heart mr-2 text-pink-600"></i>
+            Mensagens de Amor
+          </h2>
+
+          <div id="messageList" class="space-y-4 max-h-80 overflow-y-auto mb-4">
+            <!-- Mensagem padrão -->
+            <div class="p-3 bg-pink-100 dark:bg-pink-900 rounded-lg">
+              <p>Olá meu amor! Estou tão feliz por ter você na minha vida. Você é a garota mais especial do mundo para mim. ❤️</p>
+              <p class="text-sm text-right mt-1 text-gray-500 dark:text-gray-400">Agora</p>
+            </div>
+          </div>
+
+          <div>
+            <textarea id="newMessage" placeholder="Escreva uma mensagem especial..." class="w-full p-3 border rounded-lg mb-2 dark:bg-gray-700 dark:text-white dark:border-gray-600"></textarea>
+            <div class="flex justify-between mb-2">
+              <button onclick="showPhraseModal()" class="text-pink-500 hover:text-pink-700 dark:text-pink-400 dark:hover:text-pink-300 text-sm">
+                <i class="fas fa-magic mr-1"></i> Usar frase de anime
+              </button>
+              <span id="charCount" class="text-sm text-gray-500 dark:text-gray-400">0/500</span>
+            </div>
+            <button onclick="addMessage()" class="heart-button text-white font-bold py-2 px-4 rounded-full w-full flex justify-center items-center">
+              <i class="fas fa-paper-plane mr-2"></i> Enviar Mensagem
+            </button>
+          </div>
+        </div>
+
+        <!-- Poemas Tab -->
+        <div id="poems" class="tab-panel">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fas fa-feather-alt mr-2 text-pink-600"></i>
+            Poemas de Amor
+          </h2>
+
+          <div id="poemContainer" class="p-5 rounded-lg bg-pink-50 dark:bg-pink-900 mb-4 poem-card">
+            <h3 id="poemTitle" class="text-xl font-bold mb-2 text-center">Estrelas do Nosso Anime</h3>
+            <p id="poemContent" class="whitespace-pre-line">Sob o céu de um anime que criamos juntos,
+              Suas mãos, suaves como sakura em flor,
+              Seus olhos, mais brilhantes que as estrelas de Makoto Shinkai,
+              E seu coração, mais puro que cristal de Ghibli.
+
+              Em cada episódio da nossa vida a dois,
+              Vejo nosso amor crescendo como um shoujo perfeito,
+              Onde mesmo as lágrimas contam uma história de beleza,
+              E cada abraço é um frame de felicidade eterna.
+
+              Como Mitsuha e Taki, nossos fios vermelhos do destino,
+              Atravessaram tempo e espaço para nos encontrar,
+              E agora, minha protagonista, minha heroína, meu tudo,
+              Só quero viver eternamente em nosso anime de amor.</p>
+          </div>
+
+          <button onclick="changePoem()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-full w-full flex justify-center items-center">
+            <i class="fas fa-sync-alt mr-2"></i> Novo Poema
+          </button>
+        </div>
+
+        <!-- Frases de Anime Tab -->
+        <div id="quotes" class="tab-panel">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fas fa-quote-left mr-2 text-pink-600"></i>
+            Frases de Anime
+          </h2>
+
+          <div id="quoteContainer" class="p-5 rounded-lg bg-purple-50 dark:bg-purple-900 mb-4 quote-card">
+            <p id="quoteText" class="text-lg italic text-center mb-2 font-medium">"Não importa quantas vidas eu viva, eu sempre te encontrarei e me apaixonarei por você novamente."</p>
+            <p id="quoteSource" class="text-right text-sm">- Your Name (Kimi no Na wa)</p>
+          </div>
+
+          <button onclick="changeQuote()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-full w-full flex justify-center items-center">
+            <i class="fas fa-sync-alt mr-2"></i> Nova Frase
+          </button>
+        </div>
+
+        <!-- Elogios Tab -->
+        <div id="compliments" class="tab-panel">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fas fa-crown mr-2 text-pink-600"></i>
+            Elogios Para Você
+          </h2>
+
+          <div id="complimentContainer" class="p-5 rounded-lg bg-pink-50 dark:bg-pink-900 mb-4 compliment-card">
+            <h3 id="complimentTitle" class="text-xl font-bold mb-2">Qualidades Que Me Encantam em Você</h3>
+            <div id="complimentContent">
+              <p><strong>1. Sua gentileza como Tohru Honda (Fruits Basket)</strong><br>
+                Como Tohru, você tem um coração que transborda bondade. Não importa quão difícil seja a situação, você sempre encontra uma maneira de sorrir e iluminar o ambiente ao seu redor. Sua gentileza não conhece limites, e como Tohru, você tem o poder de curar corações quebrados apenas com sua presença e palavras doces. É impossível ficar triste perto de você por muito tempo.</p>
+
+              <p><strong>2. Sua força interior como Mikasa Ackerman (Attack on Titan)</strong><br>
+                Você possui uma força interior invejável que me deixa sem palavras. Como Mikasa, você enfrenta cada desafio com determinação e coragem, nunca desistindo mesmo quando o caminho parece impossível. Sua resiliência me inspira a ser melhor a cada dia, e sei que, com você ao meu lado, podemos superar qualquer obstáculo que a vida colocar em nosso caminho.</p>
+
+              <p><strong>3. Sua inteligência e perspicácia como Makise Kurisu (Steins;Gate)</strong><br>
+                Sua mente brilhante me fascina constantemente. Como Kurisu, você tem uma capacidade incrível de analisar situações complexas e encontrar soluções criativas que ninguém mais conseguiria. Adoro a forma como seus olhos brilham quando você descobre algo novo ou resolve um problema difícil. Sua inteligência não é apenas acadêmica, mas se estende à forma profunda e empática como você entende as pessoas e o mundo.</p>
+            </div>
+          </div>
+
+          <button onclick="changeCompliment()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-full w-full flex justify-center items-center">
+            <i class="fas fa-sync-alt mr-2"></i> Novo Elogio
+          </button>
+        </div>
+
+        <!-- Memórias Tab -->
+        <div id="memories" class="tab-panel">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <i class="fas fa-clock mr-2 text-pink-600"></i>
+            Nossas Memórias
+          </h2>
+
+          <div id="memoryContainer" class="p-5 rounded-lg bg-purple-50 dark:bg-purple-900 mb-4 memory-card">
+            <h3 id="memoryTitle" class="text-xl font-bold mb-2 text-center">Nossa História de Anime</h3>
+            <div id="memoryContent">
+              <p>"<strong>Destinos Entrelaçados: Nossa História</strong>"</p>
+
+              <p>Em uma cidade onde as cerejeiras florescem eternamente, dois caminhos estavam destinados a se cruzar. Ele, um jovem apaixonado por animes e sonhos; ela, uma garota com um sorriso que poderia iluminar o universo inteiro.</p>
+
+              <p>O destino os uniu em um dia chuvoso, quando ele ofereceu seu guarda-chuva para protegê-la. Como em uma cena perfeita de anime, o tempo pareceu congelar quando seus olhares se encontraram pela primeira vez. Algo invisível e poderoso os conectou instantaneamente, como se já se conhecessem em vidas passadas.</p>
+
+              <p>A cada encontro, descobriam mais similaridades, compartilhavam risadas e criavam memórias que pareciam saídas de um roteiro perfeito. Maratonavam animes juntos, trocavam cartas como Violet Evergarden escreveria, e prometiam estar lado a lado como Kirito e Asuna.</p>
+            </div>
+          </div>
+
+          <button onclick="changeMemory()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-full w-full flex justify-center items-center">
+            <i class="fas fa-sync-alt mr-2"></i> Nova Memória
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Frases -->
+    <div id="phraseModal" class="modal">
+      <div class="modal-content dark:text-white">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold">Frases de Anime Românticas</h3>
+          <button onclick="closeModal('phraseModal')" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="max-h-80 overflow-y-auto">
+          <div id="phraseList" class="space-y-2">
+            <!-- Frases serão adicionadas via JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="text-center py-4 text-sm">
+      <p>Com todo meu amor, para você ❤️</p>
+    </footer>
+
+    <script>
+      // Dados para as mudanças
+      const allPoems = [{
+          title: "Estrelas do Nosso Anime",
+          content: `Sob o céu de um anime que criamos juntos,
+Suas mãos, suaves como sakura em flor,
+Seus olhos, mais brilhantes que as estrelas de Makoto Shinkai,
+E seu coração, mais puro que cristal de Ghibli.
+
+Em cada episódio da nossa vida a dois,
+Vejo nosso amor crescendo como um shoujo perfeito,
+Onde mesmo as lágrimas contam uma história de beleza,
+E cada abraço é um frame de felicidade eterna.
+
+Como Mitsuha e Taki, nossos fios vermelhos do destino,
+Atravessaram tempo e espaço para nos encontrar,
+E agora, minha protagonista, minha heroína, meu tudo,
+Só quero viver eternamente em nosso anime de amor.`
+        },
+        {
+          title: "Sakura de Nossos Dias",
+          content: `Como pétalas de sakura ao vento,
+Nosso amor dança em sincronia perfeita,
+Voando livres, mas sempre juntos,
+Um balé rosa contra o céu azul-infinito.
+
+Teus sorrisos são episódios de alegria,
+Que assisto e revejo sem cansar,
+A doçura da tua voz é minha trilha sonora favorita,
+Embalando cada capítulo de nossa jornada.
+
+Como promessas feitas sob as estrelas de Tanabata,
+Jurei estar contigo em cada temporada,
+Pois nossa história de amor não conhece hiatus,
+E nosso romance vai além do final escrito.`
+        },
+        {
+          title: "Kimi no Kokoro",
+          content: `No labirinto do tempo, como em Steins;Gate
+Encontrei você, meu único destino certo
+Teus olhos refletem universos como Ghibli criou
+Tua alma, mais colorida que Violet Evergarden.
+
+Dokidoki, meu coração faz ao te ver
+Como protagonista de um romance perfeito
+Nosso amor, mais eterno que Clannad
+Mais intenso que qualquer finale de anime.
+
+Em cada mundo, em cada linha do tempo
+Em qualquer realidade, escolheria você
+Pois nossa história é o anime mais bonito
+Que alguém jamais poderia imaginar.`
+        },
+        {
+          title: "Para Minha Waifu Real",
+          content: `Mais linda que qualquer personagem desenhada,
+Mais real que qualquer sonho de otaku,
+Você é a waifu que ultrapassou a tela,
+E habita agora no mundo do meu coração.
+
+Teu olhar tem magia como os olhos de anime,
+Mas com um brilho que nenhum artista poderia capturar,
+Tuas palavras são como uma dublagem perfeita,
+Que sincroniza exatamente com os batimentos do meu peito.
+
+Nosso romance não precisa de filler episodes,
+Cada capítulo contigo é um mangá que quero colecionar,
+Pois você, meu amor, é o personagem principal,
+Da melhor história que eu poderia protagonizar.`
+        },
+        {
+          title: "Aishiteru Para Sempre",
+          content: `Aishiteru - palavra que sussurro em teu ouvido,
+Como os personagens que amamos fazem,
+Mas nosso amor não precisa de legenda,
+É sentido em cada toque, em cada suspiro.
+
+Como cerejeiras ao vento em um anime de primavera,
+Você traz beleza a cada cena da minha vida,
+Transformando dias comuns em episódios especiais,
+Dignos dos melhores ratings e reviews.
+
+Se a vida fosse um anime, você seria
+A personagem por quem todos torceriam,
+E eu, o sortudo coadjuvante ao seu lado,
+Eternamente grato por nossos destinos terem cruzado.`
+        },
+        {
+          title: "Em Cada Dimensão",
+          content: `Como Kimi no Na wa nos ensinou,
+Eu te encontraria através de mundos,
+Seguiria o rastro do teu cometa,
+Até te abraçar novamente.
+
+Nas múltiplas realidades de Steins;Gate,
+Em cada linha do tempo possível,
+Meu coração sempre escolheria o mesmo caminho,
+Aquele que me leva até você.
+
+Por isso, meu amor, como em cada final de episódio,
+Espero ansioso pelo próximo,
+Pois cada dia contigo é uma nova aventura,
+No mais belo anime que o destino já escreveu.`
+        }
+      ];
+
+      const allQuotes = [{
+          text: "Não importa quantas vidas eu viva, eu sempre te encontrarei e me apaixonarei por você novamente.",
+          source: "Your Name (Kimi no Na wa)"
+        },
+        {
+          text: "Eu quero ficar com você. Não importa o que aconteça, eu quero ficar com você.",
+          source: "Naruto"
+        },
+        {
+          text: "Tenho certeza que no passado, presente e futuro, eu sempre te amarei.",
+          source: "Steins;Gate"
+        },
+        {
+          text: "Amar alguém profundamente te dá coragem. Ser amado profundamente por alguém te dá força.",
+          source: "Fruits Basket"
+        },
+        {
+          text: "Sempre existe a possibilidade de algo incrível acontecer, por isso sou grato por te ter conhecido.",
+          source: "Violet Evergarden"
+        },
+        {
+          text: "Talvez as pessoas que se amam de verdade são destinadas a se encontrar, não importa quantos desvios a vida preparar.",
+          source: "A Silent Voice"
+        },
+        {
+          text: "Eu quero ser a sua força. Mesmo se você não for forte, eu te darei a minha força.",
+          source: "Fairy Tail"
+        },
+        {
+          text: "Você é a única pessoa no mundo inteiro que eu não quero que me odeie.",
+          source: "Toradora"
+        },
+        {
+          text: "Se eu pudesse, gostaria de estar ao seu lado para sempre.",
+          source: "Sword Art Online"
+        },
+        {
+          text: "Eu tenho a pessoa mais preciosa do mundo bem aqui, então não preciso de mais nada.",
+          source: "Your Lie in April"
+        }
+      ];
+
+      const allCompliments = [{
+          title: "Qualidades Que Me Encantam em Você",
+          content: `<p><strong>1. Sua gentileza como Tohru Honda (Fruits Basket)</strong><br>
+Como Tohru, você tem um coração que transborda bondade. Não importa quão difícil seja a situação, você sempre encontra uma maneira de sorrir e iluminar o ambiente ao seu redor. Sua gentileza não conhece limites, e como Tohru, você tem o poder de curar corações quebrados apenas com sua presença e palavras doces. É impossível ficar triste perto de você por muito tempo.</p>
+
+<p><strong>2. Sua força interior como Mikasa Ackerman (Attack on Titan)</strong><br>
+Você possui uma força interior invejável que me deixa sem palavras. Como Mikasa, você enfrenta cada desafio com determinação e coragem, nunca desistindo mesmo quando o caminho parece impossível. Sua resiliência me inspira a ser melhor a cada dia, e sei que, com você ao meu lado, podemos superar qualquer obstáculo que a vida colocar em nosso caminho.</p>
+
+<p><strong>3. Sua inteligência e perspicácia como Makise Kurisu (Steins;Gate)</strong><br>
+Sua mente brilhante me fascina constantemente. Como Kurisu, você tem uma capacidade incrível de analisar situações complexas e encontrar soluções criativas que ninguém mais conseguiria. Adoro a forma como seus olhos brilham quando você descobre algo novo ou resolve um problema difícil. Sua inteligência não é apenas acadêmica, mas se estende à forma profunda e empática como você entende as pessoas e o mundo.</p>`
+        },
+        {
+          title: "Cinco Razões Por Que Você É Mais Especial Que Qualquer Waifu de Anime",
+          content: `<p><strong>1. Sua beleza transcende qualquer animação</strong><br>
+Nem os melhores artistas do Studio Ghibli ou Kyoto Animation conseguiriam capturar a verdadeira beleza que você possui. Seus olhos têm uma profundidade e expressividade que nenhum desenho poderia replicar, cada sorriso seu contém mais emoção que uma temporada inteira de anime. Sua beleza não está apenas na perfeição, mas nas pequenas "imperfeições" que te tornam única e real, muito mais encantadora que qualquer personagem 2D.</p>
+
+<p><strong>2. Sua personalidade tem mais camadas que o melhor personagem de anime</strong><br>
+Você é complexa e multifacetada como os melhores personagens dos animes mais profundos, mas completamente real. Sua habilidade de ser forte e vulnerável, divertida e séria, sonhadora e prática - todas essas dimensões coexistem em harmonia, criando alguém verdadeiramente fascinante. Cada dia descubro uma nova faceta sua que me faz te amar ainda mais, uma complexidade que nenhum roteirista poderia criar.</p>
+
+<p><strong>3. O amor que compartilhamos é mais real que qualquer romance de ficção</strong><br>
+Os romances de anime podem ser lindos e emocionantes, mas o que temos transcende qualquer história ficcional. Nosso amor não foi escrito por roteiristas ou desenhado por artistas - foi construído por nós, momento a momento, com cada risada, lágrima, conversa e silêncio compartilhado. É imperfeito, desafiador e às vezes complicado, mas isso o torna infinitamente mais precioso e verdadeiro que o romance mais perfeito já animado na tela.</p>`
+        },
+        {
+          title: "As Cinco Qualidades Que Fazem Você Minha Heroína de Anime Pessoal",
+          content: `<p><strong>1. Seu brilho interior como Violet Evergarden</strong><br>
+Assim como Violet, você possui uma luz interior que cresce cada dia mais forte. Sua capacidade de compreender emoções e conectar-se profundamente com os sentimentos dos outros é quase sobrenatural. Quando você ouve alguém, não é apenas com os ouvidos, mas com todo o coração, captando nuances que a maioria das pessoas perderia. Essa sensibilidade emocional faz de você alguém extraordinariamente especial, capaz de tocar almas apenas com palavras.</p>
+
+<p><strong>2. Sua graça e elegância como Shirayuki (Snow White with the Red Hair)</strong><br>
+Você se move pelo mundo com uma graça natural que me deixa sem fôlego. Como Shirayuki, há uma elegância em tudo que você faz - desde a forma como você fala até os pequenos gestos do cotidiano. Esta não é uma elegância estudada ou artificial, mas algo que flui naturalmente de seu interior. É a beleza de alguém que está em harmonia consiga mesma, criando uma aura que deixa todos ao seu redor encantados.</p>
+
+<p><strong>3. Sua determinação como Nezuko Kamado (Demon Slayer)</strong><br>
+Sua força de vontade é impressionante. Quando você estabelece um objetivo, nada pode ficar em seu caminho. Como Nezuko, você transforma desafios em oportunidades e recusa-se a ser definida por limitações. Mesmo nos dias mais difíceis, você encontra força para seguir em frente, protegendo aqueles que ama e lutando pelo que acredita. Esta determinação inabalável é uma das qualidades que mais admiro em você.</p>`
+        }
+      ];
+
+      const allMemories = [{
+          title: "Nossa História de Anime",
+          content: `<p>"<strong>Destinos Entrelaçados: Nossa História</strong>"</p>
+
+<p>Em uma cidade onde as cerejeiras florescem eternamente, dois caminhos estavam destinados a se cruzar. Ele, um jovem apaixonado por animes e sonhos; ela, uma garota com um sorriso que poderia iluminar o universo inteiro.</p>
+
+<p>O destino os uniu em um dia chuvoso, quando ele ofereceu seu guarda-chuva para protegê-la. Como em uma cena perfeita de anime, o tempo pareceu congelar quando seus olhares se encontraram pela primeira vez. Algo invisível e poderoso os conectou instantaneamente, como se já se conhecessem em vidas passadas.</p>
+
+<p>A cada encontro, descobriam mais similaridades, compartilhavam risadas e criavam memórias que pareciam saídas de um roteiro perfeito. Maratonavam animes juntos, trocavam cartas como Violet Evergarden escreveria, e prometiam estar lado a lado como Kirito e Asuna.</p>`
+        },
+        {
+          title: "Nossas Primeiras Temporadas Juntos",
+          content: `<p>Se nossa história fosse um anime, o primeiro episódio teria sido aquele momento em que nos conhecemos. Como um encontro predestinado de um romance shoujo, nossos olhares se cruzaram e, mesmo sem perceber, o roteirista do universo já havia decidido que seríamos protagonistas da mesma história.</p>
+
+<p>A primeira temporada seria sobre descobertas - cada novo detalhe que aprendi sobre você era como um tesouro encontrado. Seus animes favoritos, seus sonhos, suas pequenas manias que rapidamente se tornaram preciosas para mim. A tensão romântica crescendo a cada episódio, com momentos de quase-confissões e mal-entendidos cômicos.</p>
+
+<p>O final da primeira temporada: nosso primeiro beijo. Uma cena que mesmo os melhores animadores do Studio Ghibli teriam dificuldade em capturar a perfeição - o tempo parando, as borboletas no estômago, a certeza de que algo especial estava apenas começando.</p>`
+        },
+        {
+          title: "Nosso Futuro Juntos",
+          content: `<p><strong>1. Nosso festival de verão</strong><br>
+Como em tantos animes românticos, iremos a um festival de verão juntos. Você usando um lindo yukata, eu de mãos dadas com você enquanto caminhamos entre as barracas iluminadas por lanternas. Quando os fogos de artifício começarem a colorir o céu, nossos olhares se encontrarão naquele momento perfeito, e eu direi novamente o quanto te amo, como Takaki e Akari em 5 Centimeters Per Second, mas nossa história terá um final muito mais feliz.</p>
+
+<p><strong>2. Nossa viagem ao mar</strong><br>
+Como Tomoya e Nagisa em Clannad, faremos uma viagem à praia. Acordaremos cedo para ver o nascer do sol refletindo nas águas. Construiremos castelos de areia, correremos na beira do mar, e quando o sol começar a se pôr, sentaremos juntos na areia para ver o horizonte pintado em tons de laranja e rosa. Nesse momento, prometeremos construir muitas outras memórias juntos por toda a vida.</p>
+
+<p><strong>3. Nosso lugar secreto</strong><br>
+Como em Orange, teremos nosso próprio lugar especial onde iremos sempre que precisarmos fugir do mundo. Talvez seja um parque tranquilo, um café aconchegante ou mesmo um cantinho em nossa futura casa. Ali, compartilharemos nossos sonhos, medos e esperanças, fazendo planos para o futuro enquanto seguramos as mãos um do outro. Esse lugar será nosso santuário, onde nosso amor será renovado a cada visita.</p>`
+        }
+      ];
+
+      const headerQuotes = [
+        "Você é meu 'soulmate' como em Your Name",
+        "Nossa história de amor é melhor que qualquer anime",
+        "Meu coração faz dokidoki quando te vejo",
+        "Você é a protagonista do anime da minha vida",
+        "Nossa história de amor merece uma segunda temporada",
+        "Somos um casal mais bonito que qualquer anime romance",
+        "Meu amor por você ultrapassa todas as dimensões do anime"
+      ];
+
+      const animeTemplates = [
+        "Assim como em Kimi no Na wa, nosso amor transcende o tempo e o espaço.",
+        "Mesmo quando estiver distante, como em 5 Centimeters Per Second, meu coração sempre estará com você.",
+        "Como Kirito e Asuna em Sword Art Online, quero ficar ao seu lado em todos os mundos e realidades.",
+        "Meu amor por você é como o de Tomoya por Nagisa em Clannad - incondicional e eterno.",
+        "Como Miyamizu Mitsuha, eu atravessaria o tempo e espaço só para te encontrar.",
+        "Meu coração faz dokidoki toda vez que penso em você, como um verdadeiro romance de anime.",
+        "Como Violet Evergarden, estou aprendendo o significado do amor todos os dias com você.",
+        "Somos como Mei e Yamato de Say I Love You, descobrindo o amor verdadeiro juntos.",
+        "Você é minha pessoa mais preciosa, como Kaori foi para Kousei em Your Lie in April.",
+        "Como Edward e Winry em Fullmetal Alchemist, darei equivalente a 85% da minha vida por você.",
+        "Quero proteger seu sorriso como Tanjiro protege Nezuko em Demon Slayer.",
+        "Mesmo que as estações mudem, como em Weathering With You, meu amor por você permanecerá constante."
+      ];
+
+      // Variável para controlar o índice atual
+      let currentPoemIndex = 0;
+      let currentQuoteIndex = 0;
+      let currentComplimentIndex = 0;
+      let currentMemoryIndex = 0;
+      let currentHeaderIndex = 0;
+
+      // Função para abrir uma aba
+      function openTab(button, tabName) {
+        // Esconder todos os painéis
+        document.querySelectorAll('.tab-panel').forEach(panel => {
+          panel.classList.remove('active');
+        });
+
+        // Remover 'active' de todos os botões
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+
+        // Ativar o botão clicado
+        button.classList.add('active');
+
+        // Mostrar o painel selecionado
+        document.getElementById(tabName).classList.add('active');
+      }
+
+      // Função para alternar o modo escuro
+      function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+
+        const themeIcon = document.getElementById('themeIcon');
+        if (document.body.classList.contains('dark-mode')) {
+          themeIcon.className = 'fas fa-sun text-pink-300';
+        } else {
+          themeIcon.className = 'fas fa-moon text-pink-600';
+        }
+      }
+
+      // Função para adicionar uma mensagem
+      function addMessage() {
+        const messageInput = document.getElementById('newMessage');
+        const messageText = messageInput.value.trim();
+
+        if (messageText) {
+          const messageList = document.getElementById('messageList');
+          const messageItem = document.createElement('div');
+          messageItem.className = 'p-3 bg-pink-100 dark:bg-pink-900 rounded-lg content-change';
+          messageItem.innerHTML = `
+                    <p>${messageText}</p>
+                    <p class="text-sm text-right mt-1 text-gray-500 dark:text-gray-400">Agora</p>
+                `;
+          messageList.appendChild(messageItem);
+          messageList.scrollTop = messageList.scrollHeight;
+
+          // Limpar input
+          messageInput.value = '';
+
+          // Atualizar contador
+          document.getElementById('charCount').textContent = '0/500';
+
+          // Criar coração
+          createHeart();
+        }
+      }
+
+      // Função para trocar o poema
+      function changePoem() {
+        // Avançar para o próximo poema
+        currentPoemIndex = (currentPoemIndex + 1) % allPoems.length;
+        const poem = allPoems[currentPoemIndex];
+
+        // Atualizar conteúdo com classe
+        const container = document.getElementById('poemContainer');
+        container.classList.remove('content-change');
+        void container.offsetWidth; // Força reflow
+        container.classList.add('content-change');
+
+        document.getElementById('poemTitle').textContent = poem.title;
+        document.getElementById('poemContent').textContent = poem.content;
+
+        // Criar coração
+        createHeart();
+      }
+
+      // Função para trocar a frase
+      function changeQuote() {
+        // Avançar para a próxima frase
+        currentQuoteIndex = (currentQuoteIndex + 1) % allQuotes.length;
+        const quote = allQuotes[currentQuoteIndex];
+
+        // Atualizar conteúdo com classe
+        const container = document.getElementById('quoteContainer');
+        container.classList.remove('content-change');
+        void container.offsetWidth; // Força reflow
+        container.classList.add('content-change');
+
+        document.getElementById('quoteText').textContent = `"${quote.text}"`;
+        document.getElementById('quoteSource').textContent = `- ${quote.source}`;
+
+        // Criar coração
+        createHeart();
+      }
+
+      // Função para trocar o elogio
+      function changeCompliment() {
+        // Avançar para o próximo elogio
+        currentComplimentIndex = (currentComplimentIndex + 1) % allCompliments.length;
+        const compliment = allCompliments[currentComplimentIndex];
+
+        // Atualizar conteúdo com classe
+        const container = document.getElementById('complimentContainer');
+        container.classList.remove('content-change');
+        void container.offsetWidth; // Força reflow
+        container.classList.add('content-change');
+
+        document.getElementById('complimentTitle').textContent = compliment.title;
+        document.getElementById('complimentContent').innerHTML = compliment.content;
+
+        // Criar coração
+        createHeart();
+      }
+
+      // Função para trocar a memória
+      function changeMemory() {
+        // Avançar para a próxima memória
+        currentMemoryIndex = (currentMemoryIndex + 1) % allMemories.length;
+        const memory = allMemories[currentMemoryIndex];
+
+        // Atualizar conteúdo com classe
+        const container = document.getElementById('memoryContainer');
+        container.classList.remove('content-change');
+        void container.offsetWidth; // Força reflow
+        container.classList.add('content-change');
+
+        document.getElementById('memoryTitle').textContent = memory.title;
+        document.getElementById('memoryContent').innerHTML = memory.content;
+
+        // Criar coração
+        createHeart();
+      }
+
+      // Função para trocar a frase do cabeçalho
+      function changeHeaderQuote() {
+        // Avançar para a próxima frase
+        currentHeaderIndex = (currentHeaderIndex + 1) % headerQuotes.length;
+        const quote = headerQuotes[currentHeaderIndex];
+
+        // Atualizar com animação
+        const element = document.getElementById('randomQuote');
+        element.classList.remove('content-change');
+        void element.offsetWidth; // Força reflow
+        element.classList.add('content-change');
+        element.textContent = quote;
+
+        // Criar coração
+        createHeart();
+      }
+
+      // Função para criar um coração flutuante
+      function createHeart() {
+        const heart = document.createElement('div');
+        heart.innerHTML = '❤️';
+        heart.className = 'heart-float';
+        heart.style.left = Math.random() * 100 + '%';
+        document.getElementById('app').appendChild(heart);
+
+        setTimeout(() => {
+          heart.remove();
+        }, 4000);
+      }
+
+      // Funções para manipular o modal
+      function showPhraseModal() {
+        // Preencher o modal com frases
+        populatePhraseModal();
+
+        // Mostrar o modal
+        document.getElementById('phraseModal').classList.add('show');
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('show');
+      }
+
+      function populatePhraseModal() {
+        const phraseList = document.getElementById('phraseList');
+        phraseList.innerHTML = '';
+
+        animeTemplates.forEach((phrase) => {
+          const phraseItem = document.createElement('div');
+          phraseItem.className = 'p-3 bg-purple-50 dark:bg-purple-900 rounded-lg phrase-item mb-2';
+          phraseItem.textContent = phrase;
+
+          phraseItem.addEventListener('click', function() {
+            document.getElementById('newMessage').value = phrase;
+            document.getElementById('charCount').textContent = `${phrase.length}/500`;
+            closeModal('phraseModal');
+          });
+
+          phraseList.appendChild(phraseItem);
+        });
+      }
+
+      // Atualizar contador de caracteres
+      document.getElementById('newMessage').addEventListener('input', function() {
+        const count = this.value.length;
+        document.getElementById('charCount').textContent = `${count}/500`;
+      });
+
+      // Verificar se há tema salvo
+      if (localStorage.getItem('dark-mode') === 'true' ||
+        (!localStorage.getItem('dark-mode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.body.classList.add('dark-mode');
+        document.getElementById('themeIcon').className = 'fas fa-sun text-pink-300';
+      }
+    </script>
+
+  </body>
+
+</html>
