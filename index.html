@@ -795,20 +795,44 @@ Como em Orange, teremos nosso próprio lugar especial onde iremos sempre que pre
       });
 
       // Verificar se há tema salvo
-      if (localStorage.getItem('dark-mode') === 'true' ||
-        (!localStorage.getItem('dark-mode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.body.classList.add('dark-mode');
-        document.getElementById('themeIcon').className = 'fas fa-sun text-pink-300';
-      }
-      document.getElementById('form-mensagem').addEventListener('submit', function(event) {
-        event.preventDefault(); // Previne o comportamento padrão de envio do formulário
-        let mensagem = document.getElementById('input-mensagem').value;
-        if (mensagem) {
-            salvarMensagens(mensagem);
-            document.getElementById('input-mensagem').value = ''; // Limpa o campo de entrada
-    
-    </script>
+  if (localStorage.getItem('dark-mode') === 'true' ||
+    (!localStorage.getItem('dark-mode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.body.classList.add('dark-mode');
+    document.getElementById('themeIcon').className = 'fas fa-sun text-pink-300';
+  }
 
-  </body>
+  // Envio do formulário para salvar mensagens
+  document.getElementById('form-mensagem').addEventListener('submit', function(event) {
+    event.preventDefault(); // Previne o comportamento padrão de envio do formulário
+    let mensagem = document.getElementById('input-mensagem').value;
+    if (mensagem) {
+        salvarMensagens(mensagem);
+        document.getElementById('input-mensagem').value = ''; // Limpa o campo de entrada
+    }
+  });
 
+  // Função para salvar a mensagem no LocalStorage
+  function salvarMensagens(mensagem) {
+    let mensagens = JSON.parse(localStorage.getItem('mensagens')) || [];
+    mensagens.push(mensagem);
+    localStorage.setItem('mensagens', JSON.stringify(mensagens));
+    exibirMensagem(mensagem);
+  }
+
+  // Função para exibir as mensagens
+  function exibirMensagem(mensagem) {
+    let div = document.createElement('div');
+    div.innerHTML = mensagem;
+    document.getElementById('mensagens-container').appendChild(div);
+  }
+
+  // Carregar mensagens ao recarregar a página
+  window.onload = () => {
+    let mensagens = JSON.parse(localStorage.getItem('mensagens')) || [];
+    mensagens.forEach(msg => {
+      exibirMensagem(msg);
+    });
+  };
+</script>
+</body>
 </html>
