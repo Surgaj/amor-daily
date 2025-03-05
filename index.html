@@ -800,6 +800,39 @@ Como em Orange, teremos nosso próprio lugar especial onde iremos sempre que pre
         document.body.classList.add('dark-mode');
         document.getElementById('themeIcon').className = 'fas fa-sun text-pink-300';
       }
+      // Função para salvar mensagens no LocalStorage
+function salvarMensagens(mensagem) {
+    let mensagens = JSON.parse(localStorage.getItem("mensagens")) || [];
+    mensagens.push(mensagem);
+    localStorage.setItem("mensagens", JSON.stringify(mensagens));
+}
+
+// Função para carregar mensagens salvas ao abrir a página
+function carregarMensagens() {
+    let mensagens = JSON.parse(localStorage.getItem("mensagens")) || [];
+    let container = document.getElementById("mensagens-salvas");
+    container.innerHTML = ""; // Limpa antes de adicionar
+
+    mensagens.forEach(msg => {
+        let p = document.createElement("p");
+        p.textContent = msg;
+        container.appendChild(p);
+    });
+}
+
+// Função para limpar as mensagens salvas
+function limparMensagens() {
+    localStorage.removeItem("mensagens");
+    carregarMensagens(); // Atualiza a exibição
+}
+
+// Chamar a função para carregar mensagens ao iniciar
+window.onload = carregarMensagens;
+salvarMensagens(mensagemGerada);
+carregarMensagens(); // Atualiza a exibição
+<button onclick="limparMensagens()">Limpar Mensagens</button>
+<div id="mensagens-salvas"></div>
+
     </script>
 
   </body>
