@@ -809,28 +809,7 @@ Como em Orange, teremos nosso próprio lugar especial onde iremos sempre que pre
         salvarMensagens(mensagem);
         document.getElementById('input-mensagem').value = ''; // Limpa o campo de entrada
     }
-  });
-
-  // Função para salvar a mensagem no LocalStorage
-  function salvarMensagens(mensagem) {
-    let mensagens = JSON.parse(localStorage.getItem('mensagens')) || [];
-    mensagens.push(mensagem);
-    localStorage.setItem('mensagens', JSON.stringify(mensagens));
-    exibirMensagem(mensagem);
-  }
-
-  // Função para exibir as mensagens
-  function exibirMensagem(mensagem) {
-    let div = document.createElement('div');
-    div.innerHTML = mensagem;
-    document.getElementById('mensagens-container').appendChild(div);
-  }
-
-  // Carregar mensagens ao recarregar a página
-  window.onload = () => {
-    let mensagens = JSON.parse(localStorage.getItem('mensagens')) || [];
-    mensagens.forEach(msg => {
-      exibirMensagem(msg);
+ 
     });
   };
 </script>
