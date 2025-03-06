@@ -801,17 +801,18 @@ Como em Orange, teremos nosso próprio lugar especial onde iremos sempre que pre
     document.getElementById('themeIcon').className = 'fas fa-sun text-pink-300';
   }
 
-  // Envio do formulário para salvar mensagens
-  document.getElementById('form-mensagem').addEventListener('submit', function(event) {
+// Envio do formulário para salvar mensagens
+document.getElementById('form-mensagem').addEventListener('submit', function(event) {
     event.preventDefault(); // Previne o comportamento padrão de envio do formulário
     let mensagem = document.getElementById('input-mensagem').value;
     if (mensagem) {
         salvarMensagens(mensagem);
         document.getElementById('input-mensagem').value = ''; // Limpa o campo de entrada
     }
- 
-    });
-  };
-</script>
-</body>
-</html>
+});
+
+// Função para salvar mensagens (exemplo)
+function salvarMensagens(mensagem) {
+    // Aqui você pode adicionar a lógica para salvar a mensagem
+    console.log('Mensagem salva:', mensagem);
+}
