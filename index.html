@@ -811,16 +811,6 @@ document.getElementById('form-mensagem').addEventListener('submit', function(eve
     }
 });
 
-// Envio do formulário para salvar mensagens
-document.getElementById('form-mensagem').addEventListener('submit', function(event) {
-    event.preventDefault(); // Previne o comportamento padrão de envio do formulário
-    let mensagem = document.getElementById('input-mensagem').value;
-    if (mensagem) {
-        salvarMensagens(mensagem);
-        document.getElementById('input-mensagem').value = ''; // Limpa o campo de entrada
-    }
-});
-
 // Função para salvar mensagens (exemplo)
 function salvarMensagens(mensagem) {
     // Aqui você pode adicionar a lógica para salvar a mensagem
