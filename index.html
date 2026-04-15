@@ -522,7 +522,7 @@ Os romances de anime podem ser lindos e emocionantes, mas o que temos transcende
 Assim como Violet, você possui uma luz interior que cresce cada dia mais forte. Sua capacidade de compreender emoções e conectar-se profundamente com os sentimentos dos outros é quase sobrenatural. Quando você ouve alguém, não é apenas com os ouvidos, mas com todo o coração, captando nuances que a maioria das pessoas perderia. Essa sensibilidade emocional faz de você alguém extraordinariamente especial, capaz de tocar almas apenas com palavras.</p>
 
 <p><strong>2. Sua graça e elegância como Shirayuki (Snow White with the Red Hair)</strong><br>
-Você se move pelo mundo com uma graça natural que me deixa sem fôlego. Como Shirayuki, há uma elegância em tudo que você faz - desde a forma como você fala até os pequenos gestos do cotidiano. Esta não é uma elegância estudada ou artificial, mas algo que flui naturalmente de seu interior. É a beleza de alguém que está em harmonia consiga mesma, criando uma aura que deixa todos ao seu redor encantados.</p>
+Você se move pelo mundo com uma graça natural que me deixa sem fôlego. Como Shirayuki, há uma elegância em tudo que você faz - desde a forma como você fala até os pequenos gestos do cotidiano. Esta não é uma elegância estudada ou artificial, mas algo que flui naturalmente de seu interior. É a beleza de alguém que está em harmonia consigo mesma, criando uma aura que deixa todos ao seu redor encantados.</p>
 
 <p><strong>3. Sua determinação como Nezuko Kamado (Demon Slayer)</strong><br>
 Sua força de vontade é impressionante. Quando você estabelece um objetivo, nada pode ficar em seu caminho. Como Nezuko, você transforma desafios em oportunidades e recusa-se a ser definida por limitações. Mesmo nos dias mais difíceis, você encontra força para seguir em frente, protegendo aqueles que ama e lutando pelo que acredita. Esta determinação inabalável é uma das qualidades que mais admiro em você.</p>`
@@ -615,12 +615,16 @@ Como em Orange, teremos nosso próprio lugar especial onde iremos sempre que pre
       function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
 
+        const isDarkMode = document.body.classList.contains('dark-mode');
         const themeIcon = document.getElementById('themeIcon');
-        if (document.body.classList.contains('dark-mode')) {
+
+        if (isDarkMode) {
           themeIcon.className = 'fas fa-sun text-pink-300';
         } else {
           themeIcon.className = 'fas fa-moon text-pink-600';
         }
+
+        localStorage.setItem('dark-mode', String(isDarkMode));
       }
 
       // Função para adicionar uma mensagem
@@ -801,21 +805,6 @@ Como em Orange, teremos nosso próprio lugar especial onde iremos sempre que pre
     document.getElementById('themeIcon').className = 'fas fa-sun text-pink-300';
   }
 
-// Envio do formulário para salvar mensagens
-document.getElementById('form-mensagem').addEventListener('submit', function(event) {
-    event.preventDefault(); // Previne o comportamento padrão de envio do formulário
-    let mensagem = document.getElementById('input-mensagem').value;
-    if (mensagem) {
-        salvarMensagens(mensagem);
-        document.getElementById('input-mensagem').value = ''; // Limpa o campo de entrada
-    }
-});
-
-// Função para salvar mensagens (exemplo)
-function salvarMensagens(mensagem) {
-    // Aqui você pode adicionar a lógica para salvar a mensagem
-    console.log('Mensagem salva:', mensagem);
-};
 </script>
 </body>
 </html>
